@@ -1,0 +1,28 @@
+{
+  "name": "ro-auth-api",
+  "version": "1.0.0",
+  "description": "ro-auth-api",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "realm": "^2.2.14",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  },
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/restaurantorder/ro-auth-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/restaurantorder/ro-auth-api/issues"
+  },
+  "homepage": "https://github.com/restaurantorder/ro-auth-api#readme"
+}
