@@ -4,10 +4,10 @@ const AuthenticationSchema = {
     properties: {
         id: 'string',
         accountId: 'string',
-        grant: 'string',
+        grant: 'string?',
         accessToken: 'string?',
-        refreshToken: 'string?'    
-        // expire: 'date'
+        refreshToken: 'string?', 
+        expire: 'date?'
     }
 };
 module.exports = AuthenticationSchema;

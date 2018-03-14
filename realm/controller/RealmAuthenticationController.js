@@ -15,50 +15,23 @@ class RealmAuthenticationController extends ParentRealmController {
     };
 
     getTokensByGrant (grant, authenticationJSON) {
+        console.log(authenticationJSON)
         authenticationJSON.accessToken = uuidv4();
         authenticationJSON.refreshToken = uuidv4();
-        // var expireDate = new Date();
-        // console.log(expireDate);
-        // let hours = expireDate.getHours() + 4;
-        // console.log(hours)
-        // expireDate.setHours(hours)
-        // console.log(expireDate)
-        // authenticationJSON.expire = expireDate;
-        authenticationJSON.grant = 'null';
-        let result = this.updateObject(this.className, grant, authenticationJSON, []);
-        let finalResult = {
-            accessToken: result.accessToken,
-            refreshToken: result.refreshToken
-        }
-        return finalResult
-    };
-
-    getAccessToken (refreshToken, authenticationJSON) {
+        let object = this.objectsWithFilter(this.className, 'grant == "' + grant + '"')
+        let id = object[0].id
+        return this.updateObject(this.className, id, authenticationJSON, []);
+        };
+             
+    getTokensByRefresh (refreshToken, authenticationJSON) {
         authenticationJSON.accessToken = uuidv4();
-        // var expireDate = new Date();
-        // let hours = expireDate.getHours() + 4;
-        // expireDate.setHours(hours)
-        // authenticationJSON.expire = expireDate;
-        // console.log(authenticationJSON)
-        let result = this.updateObject2(this.className, refreshToken, authenticationJSON, []);
-        let finalResult = {
-            accessToken: result.accessToken,
-            refreshToken: result.refreshToken
-        }
-        return finalResult
+        let object = this.objectsWithFilter(this.className, 'refreshToken == "' + refreshToken + '"')
+        let id = object[0].id
+        return this.updateObject(this.className, id, authenticationJSON, []);
     };
 
     getAccountIdByAccessToken (accessToken) {
-        let result = this.objectWithAccess(this.className, accessToken)
-        let currentDate = new Date();
-        if (currentDate < result.expireDate) {
-            let finalResult = {
-                accountId: result.accountId
-            }
-            return finalResult
-        } else {
-            return ("invalid accessToken")
-        }
+        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
     }
 }
 
