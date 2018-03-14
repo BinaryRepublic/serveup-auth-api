@@ -9,8 +9,8 @@ class ParentRealmController {
 
         var that = this;
         this.realm = Realm.open({
-            schema: [Authentication],
-            schemaVersion: 1
+            path: './DataRealm/default.realm',
+            schema: [Authentication]
         }).then(realm => {
             that.realm = realm;
         })
@@ -74,38 +74,23 @@ class ParentRealmController {
     };
 
     // Abstract methods
+    objectWithId (className, id) {
+        let object = this.realm.objects(className).filtered('id = $0', id);
+        if (object && object.length === 1) {
+            return object[0];
+        }
+    };
 
     objectsWithFilter (className, filter) {
-        filter = '(' + filter + ') && deleted == null';
+        filter = '(' + filter + ')';
         return this.realm.objects(className).filtered(filter);
-    };
-
-    objectWithGrant (className, grant) {
-        let object = this.realm.objects(className).filtered('grant = $0', grant);
-        if (object && object.length === 1) {
-            return object[0];
-        }
-    };
-
-    objectWithRefresh (className, refreshToken) {
-        let object = this.realm.objects(className).filtered('refreshToken = $0', refreshToken);
-        if (object && object.length === 1) {
-            return object[0];
-        }
-    };
-
-    objectWithAccess (className, accessToken) {
-        let object = this.realm.objects(className).filtered('accessToken = $0', accessToken);
-        if (object && object.length === 1) {
-            return object[0];
-        }
     };
 
     createObject (className, objData) {
         return this.writeObject(className, objData, false);
     };
-    
-    updateObject (className, objectGrant, objData, legalAttributes) {
+
+    updateObject (className, objectId, objData, legalAttributes) {
         for (var property in objData) {
             if (objData.hasOwnProperty(property) && legalAttributes !== true) {
                 if (!legalAttributes.includes(property)) {
@@ -113,32 +98,14 @@ class ParentRealmController {
                 }
             }
         }
-        let updateObj = this.objectWithGrant(className, objectGrant);
+        let updateObj = this.objectWithId(className, objectId);
         if (updateObj) {
-            objData.id = updateObj.id;
-            objData.accountId = updateObj.accountId;
+            objData.id = objectId;
             return this.writeObject(className, objData, true);
         }
     };
 
-    updateObject2 (className, objectRefreshToken, objData, legalAttributes) {
-        for (var property in objData) {
-            if (objData.hasOwnProperty(property) && legalAttributes !== true) {
-                if (!legalAttributes.includes(property)) {
-                    delete objData.property;
-                }
-            }
-        }
-        let updateObj = this.objectWithRefresh(className, objectRefreshToken);
-        console.log(updateObj)
-        if (updateObj) {
-            objData.id = updateObj.id;
-            objData.accountId = updateObj.accountId;
-            objData.grant = updateObj.grant
-            return this.writeObject(className, objData, true);
-        }
-    };
-
+    // Realm Methods 
     writeObject (className, obj, update) {
         let created;
         try {
