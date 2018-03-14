@@ -83,7 +83,8 @@ class ParentRealmController {
 
     objectsWithFilter (className, filter) {
         filter = '(' + filter + ')';
-        return this.realm.objects(className).filtered(filter);
+        let result = this.realm.objects(className).filtered(filter);
+        return result
     };
 
     createObject (className, objData) {

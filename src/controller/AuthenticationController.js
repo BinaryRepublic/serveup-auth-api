@@ -16,19 +16,38 @@ class AuthenticationController extends ParentController {
 
     postGrant (req, res) {
         let properties = ['accountId', 'grant'];
-        let validBody = this.requestValidator.validRequestData(req.body, properties);
+        let validBody = this.requestValidator.validRequestData(req.body, [{
+            name: 'accountId',
+            type: 'string',
+            nvalues: ['']
+        },
+        {
+            name: 'grant',
+            type: 'string',
+            nvalues: ['']
+        }]);
         let that = this;
         this.handleRequest(validBody, function() {
             let dbInput = {
                 grant: req.body.grant,
                 accountId: req.body.accountId,
             }
-            return that.realmController.createAuthentication(dbInput);
+            let result = that.realmController.createAuthentication(dbInput);
+            let finalResult = {
+                id: result.id,
+                accountId: result.accountId,
+                grant: result.grant
+            }
+            return finalResult
         }, res);
     };
 
     getTokensByGrant (req, res) {
-        let validBody = this.requestValidator.validRequestData(req.body, ['grant']);
+        let validBody = this.requestValidator.validRequestData(req.body, [{
+            name: 'grant',
+            type: 'string',
+            nvalues: ['']
+        }]);
         let that = this;
         this.handleRequest(validBody, function() {
             let expireDate = new Date();
@@ -41,15 +60,18 @@ class AuthenticationController extends ParentController {
             let result = that.realmController.getTokensByGrant(req.body.grant, dbInput);
             let finalResult = {
                 accessToken: result.accessToken,
-                refreshToken: result.refreshToken,
-                expire: result.expire
+                refreshToken: result.refreshToken
             }
             return finalResult
          }, res);
     };
 
     getTokensByRefresh (req, res) {
-        let validBody = this.requestValidator.validRequestData(req.body, ['refreshToken']);
+        let validBody = this.requestValidator.validRequestData(req.body, [{
+            name: 'refreshToken',
+            type: 'string',
+            nvalues: ['']
+        }]);
         let that = this;
         this.handleRequest(validBody, function() {
                 let expireDate = new Date();
@@ -61,15 +83,18 @@ class AuthenticationController extends ParentController {
                 let result = that.realmController.getTokensByRefresh(req.body.refreshToken, dbInput);
                 let finalResult = {
                     accessToken: result.accessToken,
-                    refreshToken: result.refreshToken,
-                    expire: result.expire
+                    refreshToken: result.refreshToken
                 }
                 return finalResult
             },  res);
     };
 
     getAccountIdByAccess (req, res) {
-        let validBody = this.requestValidator.validRequestData(req.body, ['accessToken']);
+        let validBody = this.requestValidator.validRequestData(req.body, [{
+            name: 'accessToken',
+            type: 'string',
+            nvalues: ['']
+        }]);
         let that = this;
         this.handleRequest(validBody, function() {
                 let currentDate = new Date();

@@ -15,11 +15,16 @@ class RealmAuthenticationController extends ParentRealmController {
     };
 
     getTokensByGrant (grant, authenticationJSON) {
-        console.log(authenticationJSON)
         authenticationJSON.accessToken = uuidv4();
         authenticationJSON.refreshToken = uuidv4();
+        //console.log("8")
+        //console.log(authenticationJSON)
+        //console.log(grant)
         let object = this.objectsWithFilter(this.className, 'grant == "' + grant + '"')
+        //console.log("9")
+        //console.log(object)
         let id = object[0].id
+        // console.log(id)
         return this.updateObject(this.className, id, authenticationJSON, []);
         };
              

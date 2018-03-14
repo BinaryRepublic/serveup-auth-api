@@ -1,0 +1,71 @@
+{
+    "postGrant": {
+        "emptyValues": {
+            "body": {
+                "grant": "",
+                "accountId": ""
+            }
+        },
+        "missingGrant": {
+            "body": {
+                "accountId": "2093b09f-6737-448d-b201-ee5595245d7d"
+            }
+        },
+        "missingAccountId": {
+            "body": {
+                "grant": "2093b09f-6737-448d-b201-ee5595245d7d"
+            }
+        }
+    },
+    "getTokensByGrant": {
+        "invalidGrant": {
+            "body": {
+                "grant": "invalid-grant"
+            }
+        },
+        "emptyGrant": {
+            "body": {
+                "grant": ""
+            }
+        },
+        "missingGrant": {
+            "body": {
+                
+            }
+        }
+    },
+    "getTokensByRefresh": {
+        "invalidRefresh": {
+            "body": {
+                "refreshToken": "invalid-refreshToken"
+            }
+        },
+        "emptyRefresh": {
+            "body": {
+                "refreshToken": ""
+            }
+        },
+        "missingRefresh": {
+            "body": {
+                
+            }
+        }
+    },
+    "getAccountIdByAccess": {
+        "invalidAccess": {
+            "body": {
+                "accessToken": "invalid-accessToken"
+            }
+        },
+        "emptyAccess": {
+            "body": {
+                "accessToken": ""
+            }
+        },
+        "missingAccess": {
+            "body": {
+                
+            }
+        }
+    }
+}

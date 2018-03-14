@@ -2,7 +2,7 @@
   "name": "ro-auth-api",
   "version": "1.0.0",
   "description": "ro-auth-api",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
@@ -10,10 +10,13 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.17.1"
+    "chai": "^4.1.2",
+    "mocha": "^5.0.4",
+    "nodemon": "^1.17.1",
+    "supertest": "^3.0.0"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "test": "mocha tests/**.test.js --exit"
   },
   "repository": {
     "type": "git",
