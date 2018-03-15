@@ -16,7 +16,7 @@ class ParentRealmController {
         })
     };
 
-    // transforms Object in Array
+    // transforms RealmObject in Array
     formatRealmObj (objectElem, emptyToUndefined = false, deleteRealmFlags = true) {
         let result = null;
         let worker = objectElem;

@@ -50,6 +50,8 @@ class AuthenticationController extends ParentController {
         }]);
         let that = this;
         this.handleRequest(validBody, function() {
+            let object = that.realmController.getTokensByGrant(req.body.grant);
+            let id = object[0].id
             let expireDate = new Date();
             let hours = expireDate.getHours() + 4;
             expireDate.setHours(hours)
@@ -57,7 +59,7 @@ class AuthenticationController extends ParentController {
                 expire: expireDate,
                 grant: undefined
             }
-            let result = that.realmController.getTokensByGrant(req.body.grant, dbInput);
+            let result = that.realmController.updateByGrant(id, dbInput);
             let finalResult = {
                 accessToken: result.accessToken,
                 refreshToken: result.refreshToken
@@ -65,6 +67,7 @@ class AuthenticationController extends ParentController {
             return finalResult
          }, res);
     };
+
 
     getTokensByRefresh (req, res) {
         let validBody = this.requestValidator.validRequestData(req.body, [{
@@ -74,19 +77,21 @@ class AuthenticationController extends ParentController {
         }]);
         let that = this;
         this.handleRequest(validBody, function() {
-                let expireDate = new Date();
-                let hours = expireDate.getHours() + 4;
-                expireDate.setHours(hours)
-                let dbInput = {
-                    expire: expireDate
-                }
-                let result = that.realmController.getTokensByRefresh(req.body.refreshToken, dbInput);
-                let finalResult = {
-                    accessToken: result.accessToken,
-                    refreshToken: result.refreshToken
-                }
-                return finalResult
-            },  res);
+            let object = that.realmController.getTokensByRefresh(req.body.refreshToken);
+            let id = object[0].id
+            let expireDate = new Date();
+            let hours = expireDate.getHours() + 4;
+            expireDate.setHours(hours)
+            let dbInput = {
+                expire: expireDate
+            }
+            let result = that.realmController.updateByRefresh(id, dbInput);
+            let finalResult = {
+                accessToken: result.accessToken,
+                refreshToken: result.refreshToken
+            }
+            return finalResult
+        },  res);
     };
 
     getAccountIdByAccess (req, res) {
@@ -104,10 +109,8 @@ class AuthenticationController extends ParentController {
                         accountId: result[0].accountId
                     }
                     return finalResult
-                } else {
-                    return ("invalid accessToken")
                 }
-            },  res);
+        },  res);
     };   
 }
 
