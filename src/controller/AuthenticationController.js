@@ -51,21 +51,32 @@ class AuthenticationController extends ParentController {
         let that = this;
         this.handleRequest(validBody, function() {
             let object = that.realmController.getTokensByGrant(req.body.grant);
-            let id = object[0].id
-            let expireDate = new Date();
-            let hours = expireDate.getHours() + 4;
-            expireDate.setHours(hours)
-            let dbInput = {
-                expire: expireDate,
-                grant: undefined
+            object = that.realmController.formatRealmObj(object)[0]
+            if (object) {
+                let id = object[0].id
+                let expireDate = new Date();
+                let hours = expireDate.getHours() + 4;
+                expireDate.setHours(hours)
+                let dbInput = {
+                    expire: expireDate,
+                    grant: undefined
+                }
+                let result = that.realmController.updateByGrant(id, dbInput);
+                let finalResult = {
+                    accessToken: result.accessToken,
+                    refreshToken: result.refreshToken
+                }
+                return finalResult
+            } else {
+                return {
+                    error: {
+                        type: 'GRANT_INVALID',
+                        msg: 'grant not valid'
+                    }
+                }
             }
-            let result = that.realmController.updateByGrant(id, dbInput);
-            let finalResult = {
-                accessToken: result.accessToken,
-                refreshToken: result.refreshToken
-            }
-            return finalResult
          }, res);
+
     };
 
 
@@ -78,19 +89,29 @@ class AuthenticationController extends ParentController {
         let that = this;
         this.handleRequest(validBody, function() {
             let object = that.realmController.getTokensByRefresh(req.body.refreshToken);
-            let id = object[0].id
-            let expireDate = new Date();
-            let hours = expireDate.getHours() + 4;
-            expireDate.setHours(hours)
-            let dbInput = {
-                expire: expireDate
+            object = that.realmController.formatRealmObj(object)[0]
+            if (object) {
+                let id = object[0].id
+                let expireDate = new Date();
+                let hours = expireDate.getHours() + 4;
+                expireDate.setHours(hours)
+                let dbInput = {
+                    expire: expireDate
+                }
+                let result = that.realmController.updateByRefresh(id, dbInput);
+                let finalResult = {
+                    accessToken: result.accessToken,
+                    refreshToken: result.refreshToken
+                }
+                return finalResult
+            } else {
+                return {
+                    error: {
+                        type: 'REFRESH_TOKEN_INVALID',
+                        msg: 'refreshToken not valid'
+                    }
+                }
             }
-            let result = that.realmController.updateByRefresh(id, dbInput);
-            let finalResult = {
-                accessToken: result.accessToken,
-                refreshToken: result.refreshToken
-            }
-            return finalResult
         },  res);
     };
 
@@ -104,14 +125,31 @@ class AuthenticationController extends ParentController {
         this.handleRequest(validBody, function() {
                 let currentDate = new Date();
                 let result = that.realmController.getAccountIdByAccessToken(req.body.accessToken);
-                if (currentDate < result[0].expire) {
+                result = that.realmController.formatRealmObj(result)[0]
+                if (result != undefined && currentDate < result.expire) {
                     let finalResult = {
                         accountId: result[0].accountId
                     }
                     return finalResult
+                } else if (!result) {
+                    return {
+                        error: {
+                            type: 'ACCESS_TOKEN_INVALID',
+                            msg: 'accessToken is invalid'
+                        }
+                    }
+                } else {
+                    return {
+                        error: {
+                            type: 'ACCESS_TOKEN_EXPIRED',
+                            msg: 'accesstoken is expired. Please refresh!'
+                        }
+                    }
                 }
         },  res);
     };   
+
+    // Logout Function: Post accessToken to /logout --> filter by accessToken, delete complete authentication
 }
 
 module.exports = AuthenticationController;
