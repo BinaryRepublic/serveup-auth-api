@@ -23,7 +23,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_VALUE');
                     done();
@@ -36,7 +35,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
                     done();
@@ -49,7 +47,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
                     done();
@@ -60,7 +57,7 @@ describe('loading express', function () {
                 .post('/access/grant')
                 .send(invalid.getTokensByGrant.invalidGrant.body)
                 .set('Accept', 'application/json')
-                .expect(500, done)
+                .expect(500, done);
         });
         it('POST /access/grant emptyGrant', (done) => {
             request(server)
@@ -69,7 +66,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_VALUE');
                     done();
@@ -82,7 +78,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
                     done();
@@ -93,7 +88,7 @@ describe('loading express', function () {
                 .post('/access/refresh')
                 .send(invalid.getTokensByRefresh.invalidRefresh.body)
                 .set('Accept', 'application/json')
-                .expect(500, done)
+                .expect(500, done);
         });
         it('POST /access/refresh emptyRefresh', (done) => {
             request(server)
@@ -102,7 +97,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_VALUE');
                     done();
@@ -115,7 +109,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
                     done();
@@ -126,7 +119,7 @@ describe('loading express', function () {
                 .post('/access')
                 .send(invalid.getAccountIdByAccess.invalidAccess.body)
                 .set('Accept', 'application/json')
-                .expect(500, done)
+                .expect(500, done);
         });
         it('POST /access emptyAccess', (done) => {
             request(server)
@@ -135,7 +128,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_VALUE');
                     done();
@@ -148,7 +140,6 @@ describe('loading express', function () {
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
-
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
                     done();

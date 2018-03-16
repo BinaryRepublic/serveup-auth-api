@@ -11,7 +11,3 @@ Router.post('/access/refresh', authenticationController.getTokensByRefresh);
 Router.post('/access', authenticationController.getAccountIdByAccess);
 
 module.exports = Router;
-
-
-
-

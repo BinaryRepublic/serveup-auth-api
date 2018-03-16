@@ -35,7 +35,7 @@ describe('loading express', function () {
             let data = {
                 grant: grant,
                 accountId: accountId
-            }
+            };
             request(server)
                 .post('/grant')
                 .send(data)
@@ -54,7 +54,7 @@ describe('loading express', function () {
         it('POST /access/grant', (done) => {
             let data = {
                 grant: grant
-            }
+            };
             request(server)
                 .post('/access/grant')
                 .send(data)
@@ -73,8 +73,8 @@ describe('loading express', function () {
         });
         it('POST /access/refresh', (done) => {
             let data = {
-                refreshToken:refreshToken
-            }
+                refreshToken: refreshToken
+            };
             request(server)
                 .post('/access/refresh')
                 .send(data)
@@ -92,8 +92,8 @@ describe('loading express', function () {
         });
         it('POST /access', (done) => {
             let data = {
-                accessToken:accessToken2
-            }
+                accessToken: accessToken2
+            };
             request(server)
                 .post('/access')
                 .send(data)

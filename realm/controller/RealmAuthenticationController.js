@@ -15,17 +15,17 @@ class RealmAuthenticationController extends ParentRealmController {
     };
 
     getTokensByGrant (grant, authenticationJSON) {
-        return this.objectsWithFilter(this.className, 'grant == "' + grant + '"')
-        };
+        return this.objectsWithFilter(this.className, 'grant == "' + grant + '"');
+    };
     
     updateByGrant (id, authenticationJSON) {
         authenticationJSON.accessToken = uuidv4();
         authenticationJSON.refreshToken = uuidv4();
         return this.updateObject(this.className, id, authenticationJSON, []);
-        };
+    };
              
     getTokensByRefresh (refreshToken, authenticationJSON) {
-        return this.objectsWithFilter(this.className, 'refreshToken == "' + refreshToken + '"')
+        return this.objectsWithFilter(this.className, 'refreshToken == "' + refreshToken + '"');
     };
 
     updateByRefresh (id, authenticationJSON) {
@@ -34,13 +34,8 @@ class RealmAuthenticationController extends ParentRealmController {
     };
 
     getAccountIdByAccessToken (accessToken) {
-        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
+        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"');
     };
 }
 
 module.exports = RealmAuthenticationController;
-
-
-
-
-

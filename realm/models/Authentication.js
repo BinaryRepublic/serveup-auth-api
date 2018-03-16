@@ -6,7 +6,7 @@ const AuthenticationSchema = {
         accountId: 'string',
         grant: 'string?',
         accessToken: 'string?',
-        refreshToken: 'string?', 
+        refreshToken: 'string?',
         expire: 'date?'
     }
 };

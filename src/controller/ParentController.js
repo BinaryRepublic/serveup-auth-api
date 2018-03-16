@@ -1,6 +1,6 @@
 'use strict';
 
-const RequestValidator = require('./RequestValidator'); 
+const RequestValidator = require('./RequestValidator');
 const ParentRealmController = require('../../realm/ParentRealmController');
 
 class ParentController {

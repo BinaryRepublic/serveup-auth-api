@@ -13,7 +13,7 @@ class ParentRealmController {
             schema: [Authentication]
         }).then(realm => {
             that.realm = realm;
-        })
+        });
     };
 
     // transforms RealmObject in Array
@@ -84,7 +84,7 @@ class ParentRealmController {
     objectsWithFilter (className, filter) {
         filter = '(' + filter + ')';
         let result = this.realm.objects(className).filtered(filter);
-        return result
+        return result;
     };
 
     createObject (className, objData) {
@@ -106,7 +106,7 @@ class ParentRealmController {
         }
     };
 
-    // Realm Methods 
+    // Realm Methods
     writeObject (className, obj, update) {
         let created;
         try {
@@ -124,4 +124,3 @@ class ParentRealmController {
 }
 
 module.exports = ParentRealmController;
-
