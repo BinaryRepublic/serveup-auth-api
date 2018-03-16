@@ -63,6 +63,7 @@ class AuthenticationController extends ParentController {
                 let result = that.realmController.updateByGrant(id, dbInput);
                 let finalResult = {
                     accessToken: result.accessToken,
+                    expire: expireDate,
                     refreshToken: result.refreshToken
                 };
                 return finalResult;
@@ -98,6 +99,7 @@ class AuthenticationController extends ParentController {
                 let result = that.realmController.updateByRefresh(id, dbInput);
                 let finalResult = {
                     accessToken: result.accessToken,
+                    expire: expireDate,
                     refreshToken: result.refreshToken
                 };
                 return finalResult;
