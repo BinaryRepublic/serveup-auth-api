@@ -125,9 +125,9 @@ class AuthenticationController extends ParentController {
             let currentDate = new Date();
             let result = that.realmController.getAccountIdByAccessToken(req.body.accessToken);
             result = that.realmController.formatRealmObj(result)[0];
-            if (result != undefined && currentDate < result.expire) {
+            if (result !== undefined && currentDate < result.expire) {
                 let finalResult = {
-                    accountId: result[0].accountId
+                    accountId: result.accountId
                 };
                 return finalResult;
             } else if (!result) {
