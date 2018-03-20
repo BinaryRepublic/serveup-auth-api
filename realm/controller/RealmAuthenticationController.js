@@ -33,8 +33,8 @@ class RealmAuthenticationController extends ParentRealmController {
         return this.updateObject(this.className, id, authenticationJSON, []);
     };
 
-    getAccountIdByAccessToken (accessToken) {
-        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"');
+    getClientIdByAccessToken (accessToken) {
+        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
     };
 }
 

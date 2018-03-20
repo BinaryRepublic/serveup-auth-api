@@ -10,13 +10,12 @@ class AuthenticationController extends ParentController {
         this.postGrant = this.postGrant.bind(this);
         this.getTokensByGrant = this.getTokensByGrant.bind(this);
         this.getTokensByRefresh = this.getTokensByRefresh.bind(this);
-        this.getAccountIdByAccess = this.getAccountIdByAccess.bind(this);
+        this.getClientIdByAccess = this.getClientIdByAccess.bind(this);
     };
 
     postGrant (req, res) {
-        let properties = ['accountId', 'grant'];
         let validBody = this.requestValidator.validRequestData(req.body, [{
-            name: 'accountId',
+            name: 'clientId',
             type: 'string',
             nvalues: ['']
         },
@@ -29,12 +28,12 @@ class AuthenticationController extends ParentController {
         this.handleRequest(validBody, function () {
             let dbInput = {
                 grant: req.body.grant,
-                accountId: req.body.accountId
-            };
+                clientId: req.body.clientId,
+            }
             let result = that.realmController.createAuthentication(dbInput);
             let finalResult = {
                 id: result.id,
-                accountId: result.accountId,
+                clientId: result.clientId,
                 grant: result.grant
             };
             return finalResult;
@@ -52,7 +51,7 @@ class AuthenticationController extends ParentController {
             let object = that.realmController.getTokensByGrant(req.body.grant);
             object = that.realmController.formatRealmObj(object)[0];
             if (object) {
-                let id = object.id;
+                let id = object.id
                 let expireDate = new Date();
                 let hours = expireDate.getHours() + 4;
                 expireDate.setHours(hours);
@@ -89,7 +88,7 @@ class AuthenticationController extends ParentController {
             let object = that.realmController.getTokensByRefresh(req.body.refreshToken);
             object = that.realmController.formatRealmObj(object)[0];
             if (object) {
-                let id = object.id;
+                let id = object.id
                 let expireDate = new Date();
                 let hours = expireDate.getHours() + 4;
                 expireDate.setHours(hours);
@@ -114,7 +113,7 @@ class AuthenticationController extends ParentController {
         }, res);
     };
 
-    getAccountIdByAccess (req, res) {
+    getClientIdByAccess (req, res) {
         let validBody = this.requestValidator.validRequestData(req.body, [{
             name: 'accessToken',
             type: 'string',
@@ -127,7 +126,7 @@ class AuthenticationController extends ParentController {
             result = that.realmController.formatRealmObj(result)[0];
             if (result !== undefined && currentDate < result.expire) {
                 let finalResult = {
-                    accountId: result.accountId
+                    clientId: result.clientId
                 };
                 return finalResult;
             } else if (!result) {
@@ -149,6 +148,7 @@ class AuthenticationController extends ParentController {
     };
 
     // Logout Function: Post accessToken to /logout --> filter by accessToken, delete complete authentication
+    // Unit Test anpassen, Error Handling mit reinschreiben --> Type vom Error reinpacken
 }
 
 module.exports = AuthenticationController;
