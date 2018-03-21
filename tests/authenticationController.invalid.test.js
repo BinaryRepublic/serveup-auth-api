@@ -3,8 +3,6 @@
 const expect = require('chai').expect;
 const request = require('supertest');
 
-// const Helper = require('./helper/helper');
-
 const invalid = require('./mockData/authenticationController/invalid');
 
 describe('loading express', function () {
@@ -40,10 +38,10 @@ describe('loading express', function () {
                     done();
                 });
         });
-        it('POST /grant missingAccountId', (done) => {
+        it('POST /grant missingClientId', (done) => {
             request(server)
                 .post('/grant')
-                .send(invalid.postGrant.missingAccountId.body)
+                .send(invalid.postGrant.missingClientId.body)
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
@@ -57,7 +55,12 @@ describe('loading express', function () {
                 .post('/access/grant')
                 .send(invalid.getTokensByGrant.invalidGrant.body)
                 .set('Accept', 'application/json')
-                .expect(500, done);
+                .expect(500)
+                .end(function (err, response) {
+                    if (err) return done(err);
+                    expect(response.body.error.type).to.equal('GRANT_INVALID');
+                    done();
+                });
         });
         it('POST /access/grant emptyGrant', (done) => {
             request(server)
@@ -88,7 +91,12 @@ describe('loading express', function () {
                 .post('/access/refresh')
                 .send(invalid.getTokensByRefresh.invalidRefresh.body)
                 .set('Accept', 'application/json')
-                .expect(500, done);
+                .expect(500)
+                .end(function (err, response) {
+                    if (err) return done(err);
+                    expect(response.body.error.type).to.equal('REFRESH_TOKEN_INVALID');
+                    done();
+                });
         });
         it('POST /access/refresh emptyRefresh', (done) => {
             request(server)
@@ -117,14 +125,19 @@ describe('loading express', function () {
         it('POST /access invalidAccess', (done) => {
             request(server)
                 .post('/access')
-                .send(invalid.getAccountIdByAccess.invalidAccess.body)
+                .send(invalid.getClientIdByAccess.invalidAccess.body)
                 .set('Accept', 'application/json')
-                .expect(500, done);
+                .expect(500)
+                .end(function (err, response) {
+                    if (err) return done(err);
+                    expect(response.body.error.type).to.equal('ACCESS_TOKEN_INVALID');
+                    done();
+                });
         });
         it('POST /access emptyAccess', (done) => {
             request(server)
                 .post('/access')
-                .send(invalid.getAccountIdByAccess.emptyAccess.body)
+                .send(invalid.getClientIdByAccess.emptyAccess.body)
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
@@ -136,12 +149,24 @@ describe('loading express', function () {
         it('POST /access missingAccess', (done) => {
             request(server)
                 .post('/access')
-                .send(invalid.getAccountIdByAccess.missingAccess.body)
+                .send(invalid.getClientIdByAccess.missingAccess.body)
                 .set('Accept', 'application/json')
                 .expect(400)
                 .end(function (err, response) {
                     if (err) return done(err);
                     expect(response.body.error.type).to.equal('PARAM_MISSING');
+                    done();
+                });
+        });
+        it('POST /access expiredAccess', (done) => {
+            request(server)
+                .post('/access')
+                .send(invalid.getClientIdByAccess.expiredAccess.body)
+                .set('Accept', 'application/json')
+                .expect(500)
+                .end(function (err, response) {
+                    if (err) return done(err);
+                    expect(response.body.error.type).to.equal('ACCESS_TOKEN_EXPIRED');
                     done();
                 });
         });

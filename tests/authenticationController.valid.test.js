@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const request = require('supertest');
 const uuidv4 = require('uuid/v4');
 
-// const Helper = require('./helper/helper');
+const Helper = require('./helper/helper');
 
 // require controllers
 const AuthenticationController = require('../src/controller/AuthenticationController');
@@ -13,7 +13,7 @@ let refreshToken;
 let accessToken;
 let accessToken2;
 let grant = uuidv4();
-let accountId = uuidv4();
+let clientId = uuidv4();
 
 describe('loading express', function () {
     let server;
@@ -29,12 +29,13 @@ describe('loading express', function () {
             expect(authentication.postGrant).to.be.a('Function');
             expect(authentication.getTokensByGrant).to.be.a('Function');
             expect(authentication.getTokensByRefresh).to.be.a('Function');
-            expect(authentication.getAccountIdByAccess).to.be.a('Function');
+            expect(authentication.getClientIdByAccess).to.be.a('Function');
+            expect(authentication.deleteAuthentication).to.be.a('Function');
         });
         it('POST /grant', (done) => {
             let data = {
                 grant: grant,
-                accountId: accountId
+                clientId: clientId
             };
             request(server)
                 .post('/grant')
@@ -46,7 +47,7 @@ describe('loading express', function () {
                     
                     let authentication = response.body;
                     expect(authentication.id).to.be.a('string');
-                    expect(authentication.accountId).to.be.a('string');
+                    expect(authentication.clientId).to.be.a('string');
                     expect(authentication.grant).to.be.a('string');
                     done();
                 });
@@ -103,7 +104,29 @@ describe('loading express', function () {
                     if (err) return done(err);
 
                     let authentication = response.body;
-                    expect(authentication.accountId).to.be.a('string');
+                    expect(authentication.clientId).to.be.a('string');
+                    done();
+                });
+        });
+        it('DELETE /logout', (done) => {
+            let data = {
+                accessToken: accessToken2
+            };
+            console.log(data)
+            console.log(data.accessToken)
+            request(server)
+                .delete('/logout/' + data.accessToken)
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end(function (err, response) {
+                    if (err) return done(err);
+                    let authentication = response.body;
+                    expect(response.body.error).not.to.exist;
+                    expect(authentication.id).to.be.a('string');
+                    expect(authentication.clientId).to.be.a('string');
+                    expect(authentication.accessToken).to.be.a('string');
+                    expect(authentication.refreshToken).to.be.a('string');
+                    expect(authentication.expire).to.be.a('string');
                     done();
                 });
         });
