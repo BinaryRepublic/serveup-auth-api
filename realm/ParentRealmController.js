@@ -10,7 +10,22 @@ class ParentRealmController {
         var that = this;
         this.realm = Realm.open({
             path: './DataRealm/default.realm',
-            schema: [Authentication]
+            schema: [Authentication],
+            schemaVersion: 2,
+            migration: (oldRealm, newRealm) => {
+                if (oldRealm.schemaVersion === undefined || oldRealm.schemaVersion === 1) {
+                    console.log('##############################################################');
+                    console.log('REALM Migration to Version 2');
+                    console.log('##############################################################');
+                    let oldAuthentications = oldRealm.objects('Authentication');
+
+                    for (let i = 0; i < oldAuthentications.length; i++) {
+                        let oldAuthentication = oldAuthentications[i];
+                        let newAuthentication = newRealm.objects('Authentication').filtered('id = $0', oldAuthentication.id);
+                        newAuthentication.clientId = oldAuthentication.accountId;
+                    }
+                }
+            }
         }).then(realm => {
             that.realm = realm;
         });
@@ -104,6 +119,21 @@ class ParentRealmController {
             objData.id = objectId;
             return this.writeObject(className, objData, true);
         }
+    };
+
+    deleteObject (className, obj) {
+        let deleted = this.formatRealmObj(obj)[0];
+        try {
+            this.realm.write(() => {
+                this.realm.delete(obj);
+            });
+        } catch (e) {
+            if (process.env.DEBUG) {
+                console.log('Error on creation: ' + e);
+                console.log(className + ' -> ' + JSON.stringify(obj));
+            }
+        }
+        return deleted;
     };
 
     // Realm Methods
