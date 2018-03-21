@@ -21,9 +21,13 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
-    "test": "exit 0",
+    "test": "npm run clean && npm run testdbsetup && mocha tests/**.test.js --exit && npm run clean",
+    "testdbsetup": "mkdir DataRealm && cp tests/mockData/db/default.realm DataRealm/default.realm",
+    "clean": "rm -rf DataRealm",
     "start": "node app.js",
-    "docker": "docker build -t ro/auth-api ."
+    "docker": "docker build -t ro/auth-api .",
+    "dev": "pm2 start app.js",
+    "debug": "DEBUG=debug node app.js"
   },
   "repository": {
     "type": "git",
