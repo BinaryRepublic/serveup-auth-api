@@ -11,6 +11,7 @@ class AuthenticationController extends ParentController {
         this.getTokensByGrant = this.getTokensByGrant.bind(this);
         this.getTokensByRefresh = this.getTokensByRefresh.bind(this);
         this.getClientIdByAccess = this.getClientIdByAccess.bind(this);
+        this.deleteAuthentication = this.deleteAuthentication.bind(this);
     };
 
     postGrant (req, res) {
@@ -122,7 +123,7 @@ class AuthenticationController extends ParentController {
         let that = this;
         this.handleRequest(validBody, function () {
             let currentDate = new Date();
-            let result = that.realmController.getAccountIdByAccessToken(req.body.accessToken);
+            let result = that.realmController.getClientIdByAccessToken(req.body.accessToken);
             result = that.realmController.formatRealmObj(result)[0];
             if (result !== undefined && currentDate < result.expire) {
                 let finalResult = {
@@ -147,8 +148,29 @@ class AuthenticationController extends ParentController {
         }, res);
     };
 
-    // Logout Function: Post accessToken to /logout --> filter by accessToken, delete complete authentication
-    // Unit Test anpassen, Error Handling mit reinschreiben --> Type vom Error reinpacken
+    deleteAuthentication (req, res) {
+        let validParams = this.requestValidator.validRequestData(req.params, [{
+            name: 'accessToken',
+            type: 'string',
+            nvalues: ['']
+        }]);
+        let that = this;
+        this.handleRequest(validParams, function () {
+            let object = that.realmController.getAuthenticationByAccessToken(req.params.accessToken);
+            if (object[0]) {
+                return that.realmController.deleteAuthentication(object);
+            } else {
+                return {
+                    error: {
+                        type: 'ACCESS_TOKEN_INVALID',
+                        msg: 'accesstoken not valid'
+                    }
+                };
+            }
+        }, res);
+    };
+
+    // Unit Tests kontrollieren, Wieso wird das Date nicht anerkannt? Stimmt Delete sonst soweit?
 }
 
 module.exports = AuthenticationController;

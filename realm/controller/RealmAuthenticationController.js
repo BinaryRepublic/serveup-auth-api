@@ -36,6 +36,14 @@ class RealmAuthenticationController extends ParentRealmController {
     getClientIdByAccessToken (accessToken) {
         return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
     };
+
+    getAuthenticationByAccessToken (accessToken) {
+        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
+    };
+
+    deleteAuthentication (obj) {
+        return this.deleteObject(this.className, obj);
+    };
 }
 
 module.exports = RealmAuthenticationController;
