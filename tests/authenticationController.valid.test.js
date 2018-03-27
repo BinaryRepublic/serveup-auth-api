@@ -112,8 +112,6 @@ describe('loading express', function () {
             let data = {
                 accessToken: accessToken2
             };
-            console.log(data)
-            console.log(data.accessToken)
             request(server)
                 .delete('/logout/' + data.accessToken)
                 .set('Accept', 'application/json')
