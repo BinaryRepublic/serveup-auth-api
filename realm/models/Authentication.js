@@ -3,10 +3,10 @@ const AuthenticationSchema = {
     primaryKey: 'id',
     properties: {
         id: 'string',
-        accountId: 'string',
+        clientId: 'string',
         grant: 'string?',
         accessToken: 'string?',
-        refreshToken: 'string?', 
+        refreshToken: 'string?',
         expire: 'date?'
     }
 };

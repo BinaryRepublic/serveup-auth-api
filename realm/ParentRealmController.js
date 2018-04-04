@@ -10,13 +10,28 @@ class ParentRealmController {
         var that = this;
         this.realm = Realm.open({
             path: './DataRealm/default.realm',
-            schema: [Authentication]
+            schema: [Authentication],
+            schemaVersion: 2,
+            migration: (oldRealm, newRealm) => {
+                if (oldRealm.schemaVersion === undefined || oldRealm.schemaVersion === 1) {
+                    console.log('##############################################################');
+                    console.log('REALM Migration to Version 2');
+                    console.log('##############################################################');
+                    let oldAuthentications = oldRealm.objects('Authentication');
+
+                    for (let i = 0; i < oldAuthentications.length; i++) {
+                        let oldAuthentication = oldAuthentications[i];
+                        let newAuthentication = newRealm.objects('Authentication').filtered('id = $0', oldAuthentication.id);
+                        newAuthentication.clientId = oldAuthentication.accountId;
+                    }
+                }
+            }
         }).then(realm => {
             that.realm = realm;
-        })
+        });
     };
 
-    // transforms Object in Array
+    // transforms RealmObject in Array
     formatRealmObj (objectElem, emptyToUndefined = false, deleteRealmFlags = true) {
         let result = null;
         let worker = objectElem;
@@ -83,7 +98,8 @@ class ParentRealmController {
 
     objectsWithFilter (className, filter) {
         filter = '(' + filter + ')';
-        return this.realm.objects(className).filtered(filter);
+        let result = this.realm.objects(className).filtered(filter);
+        return result;
     };
 
     createObject (className, objData) {
@@ -105,7 +121,22 @@ class ParentRealmController {
         }
     };
 
-    // Realm Methods 
+    deleteObject (className, obj) {
+        let deleted = this.formatRealmObj(obj)[0];
+        try {
+            this.realm.write(() => {
+                this.realm.delete(obj);
+            });
+        } catch (e) {
+            if (process.env.DEBUG) {
+                console.log('Error on creation: ' + e);
+                console.log(className + ' -> ' + JSON.stringify(obj));
+            }
+        }
+        return deleted;
+    };
+
+    // Realm Methods
     writeObject (className, obj, update) {
         let created;
         try {
@@ -123,4 +154,3 @@ class ParentRealmController {
 }
 
 module.exports = ParentRealmController;
-

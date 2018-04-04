@@ -15,29 +15,35 @@ class RealmAuthenticationController extends ParentRealmController {
     };
 
     getTokensByGrant (grant, authenticationJSON) {
-        console.log(authenticationJSON)
+        return this.objectsWithFilter(this.className, 'grant == "' + grant + '"');
+    };
+    
+    updateByGrant (id, authenticationJSON) {
         authenticationJSON.accessToken = uuidv4();
         authenticationJSON.refreshToken = uuidv4();
-        let object = this.objectsWithFilter(this.className, 'grant == "' + grant + '"')
-        let id = object[0].id
         return this.updateObject(this.className, id, authenticationJSON, []);
-        };
+    };
              
     getTokensByRefresh (refreshToken, authenticationJSON) {
+        return this.objectsWithFilter(this.className, 'refreshToken == "' + refreshToken + '"');
+    };
+
+    updateByRefresh (id, authenticationJSON) {
         authenticationJSON.accessToken = uuidv4();
-        let object = this.objectsWithFilter(this.className, 'refreshToken == "' + refreshToken + '"')
-        let id = object[0].id
         return this.updateObject(this.className, id, authenticationJSON, []);
     };
 
-    getAccountIdByAccessToken (accessToken) {
+    getClientIdByAccessToken (accessToken) {
         return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
-    }
+    };
+
+    getAuthenticationByAccessToken (accessToken) {
+        return this.objectsWithFilter(this.className, 'accessToken == "' + accessToken + '"')
+    };
+
+    deleteAuthentication (obj) {
+        return this.deleteObject(this.className, obj);
+    };
 }
 
 module.exports = RealmAuthenticationController;
-
-
-
-
-
