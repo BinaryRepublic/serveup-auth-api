@@ -21,7 +21,7 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
-    "test": "npm run clean && npm run testdbsetup && mocha tests/**.test.js --exit && npm run clean",
+    "test": "npm run clean && npm run testdbsetup && TEST=true mocha tests/**.test.js --exit && npm run clean",
     "testdbsetup": "mkdir DataRealm && cp tests/mockData/db/default.realm DataRealm/default.realm",
     "clean": "rm -rf DataRealm",
     "start": "node app.js",

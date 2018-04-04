@@ -38,7 +38,7 @@ class AuthenticationController extends ParentController {
                 grant: result.grant
             };
             return finalResult;
-        }, res);
+        }, res, req);
     };
 
     getTokensByGrant (req, res) {
@@ -75,7 +75,7 @@ class AuthenticationController extends ParentController {
                     }
                 };
             }
-        }, res);
+        }, res, req);
     };
 
     getTokensByRefresh (req, res) {
@@ -111,7 +111,7 @@ class AuthenticationController extends ParentController {
                     }
                 };
             }
-        }, res);
+        }, res, req);
     };
 
     getClientIdByAccess (req, res) {
@@ -145,7 +145,7 @@ class AuthenticationController extends ParentController {
                     }
                 };
             }
-        }, res);
+        }, res, req);
     };
 
     deleteAuthentication (req, res) {
@@ -167,7 +167,7 @@ class AuthenticationController extends ParentController {
                     }
                 };
             }
-        }, res);
+        }, res, req);
     };
 
     // Unit Tests kontrollieren, Wieso wird das Date nicht anerkannt? Stimmt Delete sonst soweit?
